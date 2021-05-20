@@ -56,10 +56,11 @@ namespace BL.Service
 
         public void ChecStatus()
         {
-            var tasks = taskRepository.GetAllTask().Where(p => p.TaskComplatedDate > DateTime.Now && p.Status != TaskStatus.Completed);
+            var tasks = taskRepository.GetAllTask().Where(p => p.TaskComplatedDate < DateTime.Now && p.Status != TaskStatus.Completed && p.Status != TaskStatus.Expired);
+
             foreach (var task in tasks)
-            {
-                task.Status = TaskStatus.Expired;
+            {               
+                    task.Status = TaskStatus.Expired;
             }
             taskRepository.UpDataRange(tasks);
         }

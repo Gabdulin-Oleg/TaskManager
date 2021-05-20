@@ -2,7 +2,7 @@ using System;
 
 namespace TaskManager
 {
-    public class WeatherForecast
+    public class TaskManager
     {
         public DateTime Date { get; set; }
 
