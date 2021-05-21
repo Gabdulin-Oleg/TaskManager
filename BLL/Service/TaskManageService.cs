@@ -41,12 +41,16 @@ namespace BL.Service
 
         public ICollection<TaskDto> GetTasksByFiltred(string filter)
         {
+            var tasks = taskRepository.GetAllTask();
+
+            CheckingDelinquency(tasks);
+
             if (filter == null)
             {
-                return mapper.Map<ICollection<TaskDto>>(taskRepository.GetAllTask().OrderByDescending(s=>s.Id));
+                return mapper.Map<ICollection<TaskDto>>(tasks.OrderByDescending(s=>s.Id));
             }
             var status = Enum.Parse<TaskStatus>(filter);
-            return mapper.Map<ICollection<TaskDto>>(taskRepository.GetAllTask().Where(p => p.Status == status).OrderByDescending(s=>s.Id));
+            return mapper.Map<ICollection<TaskDto>>(tasks.Where(p => p.Status == status).OrderByDescending(s=>s.Id));
         }
 
         public TaskDto GetTaskById(int id)
@@ -54,19 +58,18 @@ namespace BL.Service
             return mapper.Map<TaskDto>(taskRepository.FindById(id));
         }
 
-        public void ChecStatus()
+        public IEnumerable<Task> CheckingDelinquency(IEnumerable<Task> tasks)
         {
-            var tasks = taskRepository
-                .GetAllTask()
-                .Where(p => p.TaskComplatedDate < DateTime.Now && p.Status != TaskStatus.Completed && p.Status != TaskStatus.Expired)
-                .Select(p=>p);
-
+            tasks = tasks.Where(p => p.TaskComplatedDate < DateTime.Now && p.Status != TaskStatus.Completed && p.Status != TaskStatus.Expired).Select(p =>p );
 
             foreach (var task in tasks)
             {
                 task.Status = TaskStatus.Expired;
             }
+
             taskRepository.UpDataRange(tasks);
+
+            return tasks;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BL.Intefaces.DTO;
+using DAL.Entitis;
 using System.Collections.Generic;
 
 namespace BL.Intefaces
@@ -32,6 +33,6 @@ namespace BL.Intefaces
         /// <summary>
         /// Проверка статуса задачи (если просрочена меняет статус на Expired)
         /// </summary>
-        public void ChecStatus();
+        public IEnumerable<Task> CheckingDelinquency(IEnumerable<Task> tasks);
     }
 }

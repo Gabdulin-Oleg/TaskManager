@@ -22,7 +22,7 @@ namespace DAL.Reposytory
         }
         public Task FindById(int id)
         {
-            return AppDBContext.Set<Task>().First(p => p.Id == id);
+            return AppDBContext.Set<Task>().FirstOrDefault(p => p.Id == id);
         }   
 
         public ICollection<Task> GetAllTask()

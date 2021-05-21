@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using BL.Intefaces;
 using BL.Intefaces.DTO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using TaskManager.Models;
 using ValidationContext = System.ComponentModel.DataAnnotations.ValidationContext;
 
@@ -45,7 +47,7 @@ namespace TaskManager.Controllers
         {
             if (Validator.TryValidateObject(taskViewModel, new ValidationContext(taskViewModel), new List<ValidationResult>()))
                 return Ok(taskManageService.CreateTask(mapper.Map<TaskDto>(taskViewModel)));
-            
+
             return BadRequest();
         }
         /// <summary>
@@ -66,10 +68,15 @@ namespace TaskManager.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("{id}")]
+        [HttpGet("GetTask/{id}")]
+        [ExcludeFromCodeCoverage]
         public IActionResult GetTask(int id)
         {
-            return Ok(taskManageService.GetTaskById(id));
+            var respons = taskManageService.GetTaskById(id);
+            if (respons != null)
+                return Ok(taskManageService.GetTaskById(id));
+
+            return NotFound();
         }
         /// <summary>
         /// Получение всех задач
@@ -79,7 +86,7 @@ namespace TaskManager.Controllers
         [HttpGet]
         public IActionResult GetAllTasks(string filter)
         {
-            taskManageService.ChecStatus();
+            //taskManageService.CheckingDelinquency();
             return Ok(taskManageService.GetTasksByFiltred(filter));
         }
     }
