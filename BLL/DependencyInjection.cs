@@ -12,7 +12,7 @@ namespace BL
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddTaskManagerServices(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddTaskManagerBL(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddScoped<ITaskManageService, TaskManageService>();

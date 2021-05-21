@@ -1,30 +1,24 @@
 ﻿using AutoMapper;
 using BL.Intefaces;
 using BL.Intefaces.DTO;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 using TaskManager.Models;
 using ValidationContext = System.ComponentModel.DataAnnotations.ValidationContext;
 
 namespace TaskManager.Controllers
 {
-
+    /// <summary>
+    /// контроллер менеджера задач
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
     [SwaggerTag("Api For TaskManager")]
     public class TaskManagerController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
 
         private readonly ILogger<TaskManagerController> _logger;
         private IMapper mapper;
@@ -40,15 +34,25 @@ namespace TaskManager.Controllers
             _logger = logger;
             this.mapper = new Mapper(config);
             this.taskManageService = taskManageService;
-        }       
+        }
+        /// <summary>
+        /// Создание задачи
+        /// </summary>
+        /// <param name="taskViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult CreateTask(TaskViewModel taskViewModel)
         {
             if (Validator.TryValidateObject(taskViewModel, new ValidationContext(taskViewModel), new List<ValidationResult>()))
                 return Ok(taskManageService.CreateTask(mapper.Map<TaskDto>(taskViewModel)));
-
+            
             return BadRequest();
         }
+        /// <summary>
+        /// Обновление задачи
+        /// </summary>
+        /// <param name="taskViewModel"></param>
+        /// <returns></returns>
         [HttpPut]
         public IActionResult UpDateTask(TaskViewModel taskViewModel)
         {
@@ -57,11 +61,21 @@ namespace TaskManager.Controllers
 
             return BadRequest();
         }
+        /// <summary>
+        /// Получение задачи по ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public IActionResult GetTask(int id)
         {
             return Ok(taskManageService.GetTaskById(id));
         }
+        /// <summary>
+        /// Получение всех задач
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult GetAllTasks(string filter)
         {

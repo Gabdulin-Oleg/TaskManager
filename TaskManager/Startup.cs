@@ -1,19 +1,10 @@
 using BL;
-using DAL.DBContext;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Policy;
 
 namespace TaskManager
 {
@@ -31,12 +22,7 @@ namespace TaskManager
         {
             services.AddControllers();
 
-            //services.AddDbContext<AppDBContext>((sp, options) =>
-            //{
-            //    options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
-            //});
-
-            services.AddTaskManagerServices(Configuration);
+            services.AddTaskManagerBL(Configuration);
 
             services.AddSwaggerGen(c =>
             {

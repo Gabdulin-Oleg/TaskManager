@@ -37,6 +37,7 @@ namespace DAL.Reposytory
         }
         public void UpDataRange(IEnumerable<Task> task)
         {
+            
             AppDBContext.Set<Task>().UpdateRange(task);
             AppDBContext.SaveChanges();
         }

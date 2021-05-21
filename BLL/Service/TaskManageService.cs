@@ -24,7 +24,7 @@ namespace BL.Service
             this.taskRepository = taskRepository;
             this.mapper = new Mapper(config);
         }
-
+        
         public TaskDto CreateTask(TaskDto taskDto)
         {
             taskDto.Status = TaskStatus.Active;
@@ -43,10 +43,10 @@ namespace BL.Service
         {
             if (filter == null)
             {
-                return mapper.Map<ICollection<TaskDto>>(taskRepository.GetAllTask());
+                return mapper.Map<ICollection<TaskDto>>(taskRepository.GetAllTask().OrderByDescending(s=>s.Id));
             }
             var status = Enum.Parse<TaskStatus>(filter);
-            return mapper.Map<ICollection<TaskDto>>(taskRepository.GetAllTask().Where(p => p.Status == status).ToList());
+            return mapper.Map<ICollection<TaskDto>>(taskRepository.GetAllTask().Where(p => p.Status == status).OrderByDescending(s=>s.Id));
         }
 
         public TaskDto GetTaskById(int id)
@@ -56,11 +56,15 @@ namespace BL.Service
 
         public void ChecStatus()
         {
-            var tasks = taskRepository.GetAllTask().Where(p => p.TaskComplatedDate < DateTime.Now && p.Status != TaskStatus.Completed && p.Status != TaskStatus.Expired);
+            var tasks = taskRepository
+                .GetAllTask()
+                .Where(p => p.TaskComplatedDate < DateTime.Now && p.Status != TaskStatus.Completed && p.Status != TaskStatus.Expired)
+                .Select(p=>p);
+
 
             foreach (var task in tasks)
-            {               
-                    task.Status = TaskStatus.Expired;
+            {
+                task.Status = TaskStatus.Expired;
             }
             taskRepository.UpDataRange(tasks);
         }
