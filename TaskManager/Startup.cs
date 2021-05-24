@@ -22,7 +22,7 @@ namespace TaskManager
         {
             services.AddControllers();
 
-            services.AddTaskManagerBL(Configuration);
+            services.AddTaskManagerServices(Configuration);
 
             services.AddSwaggerGen(c =>
             {
@@ -53,7 +53,9 @@ namespace TaskManager
 
             app.UseEndpoints(endpoints =>
             {
+
                 endpoints.MapControllers();
+
             });
         }
     }

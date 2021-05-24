@@ -69,12 +69,11 @@ namespace TaskManager.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("GetTask/{id}")]
-        [ExcludeFromCodeCoverage]
         public IActionResult GetTask(int id)
         {
             var respons = taskManageService.GetTaskById(id);
             if (respons != null)
-                return Ok(taskManageService.GetTaskById(id));
+                return Ok(respons);
 
             return NotFound();
         }
