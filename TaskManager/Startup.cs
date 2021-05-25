@@ -21,7 +21,7 @@ namespace TaskManager
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-
+            services.AddControllersWithViews();
             services.AddTaskManagerServices(Configuration);
 
             services.AddSwaggerGen(c =>
